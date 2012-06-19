@@ -34,7 +34,7 @@ sub info_level { return $_[0]->{info_level} }
 
 sub autoscan { return $_[0]->{autoscan} }
 
-sub location { return wantarray ? @{$_[0]->{pidfiles}}:$_[0]->{locations} }
+sub locations { return wantarray ? @{$_[0]->{pidfiles}}:$_[0]->{locations} }
 
 sub pidfiles { return wantarray ? @{$_[0]->{pidfiles}} : $_[0]->{pidfiles} }
 
