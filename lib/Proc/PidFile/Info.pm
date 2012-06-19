@@ -121,7 +121,13 @@ __END__
 
   use Proc::PidFile::Info;
 
-  my $info = Proc::PidFile::Info->new( locations => [ qw{/var/run /my/own/rundir/} ], info_level => 1 );
+  my $info = Proc::PidFile::Info->new(
+    locations => [
+        '/var/run',
+        '/my/own/rundir/'
+    ],
+    info_level => 1,
+  );
 
   foreach my $pidfile ( $info->pidfiles() ) {
     print "Service $pidfile->{name} running with PID $pidfile->{pid}, started on " . scalar( localtime ( $pidfile->{ctime} ) ) . "\n";
@@ -137,7 +143,15 @@ file. The creation time of the PID file is assumed to be the timestamp when the 
 can also read the PID from the PID file. The information gathered is returned as an array of hashes. Each hash describes the
 information for a PID file and it's associated service or daemon.
 
-There are two level of scanning:
+=attr locations
+
+Stores the locations in which the scanner searches for PID files. PID files must have a C<.pid> extension.
+
+Default value: C</var/run>
+
+=attr info_level
+
+Specifies how much information the scanner will gather from the PID files
 
 =over 4
 
@@ -151,6 +165,14 @@ Also opens each PID file and reads the PID from it. The info hashes will also co
 
 =back
 
+Default value: 0
+
+=attr autoscan
+
+A boolean flag which causes the scanner to automatically initiate a scan after object construction.
+
+Default value: 1
+
 =method new
 
 Creates a new PID file scanner objects. Arguments are:
@@ -159,39 +181,24 @@ Creates a new PID file scanner objects. Arguments are:
 
 =item locations
 
-A list of files and / or directories to scan. Only files with C<.pid> extension are scanned.
+A list of files and directories to scan. See C<locations>
 
 =item info_level
 
-How much detail to extract from PID files. On info level 0 the scanner gathers file name and ctime. On info level 1 the scanner reads
-the PID from the file in addition to file name and ctime. Default value: 0.
+How much detail to extract from PID files. See C<info_level>
 
 =item autoscan
 
-If true, the scanner will perform a scan right after it is constructed. The C<pidfiles> information is available right away. If false,
-you must call C<scan()> to populate the C<pidfiles> information.
+If true, the scanner will perform a scan right after it is constructed. See C<autoscan>
 
 =back
 
-=method info_level
+=method scan
 
-Returns the value of the C<info_level> property.
-
-=method autoscan
-
-Returns the value of the C<autoscan> property.
-
-=method locations
-
-Returns the value of the C<locations> property. Depending upon the calling context a list or an array reference is returned.
+Scans all the locations and gathers PID file information. This method is automatically called on object initialization, if the
+C<autoscan> property is set to true.
 
 =method pidfiles
 
-Returns the value of the C<pidfiles> property, i.e. the information gathered from the PID files. If the C<autoscan> property
-is set to false, you must call the C<scan()> method to populate the C<pidfiles> property. Depending upon the calling context
-a list ot an array reference is returned.
-
-=method scan
-
-Scans all the locations and re-populates the C<pidfiles> property. This is automatically done on object initialization, if the
-C<autoscan> property is set to true.
+Returns the information gathered from the PID files. If the C<autoscan> property is set to false, you must call the L</scan> method
+to gather the information first. Depending upon the calling context a list ot an array reference is returned.
