@@ -11,12 +11,12 @@ my %service_info = (
 );
 
 $info = new_ok("Proc::PidFile::Info", [ autoscan => 0 ]);
-is_deeply( scalar $info->location,  [ '/var/run' ], 'default location');
+is_deeply( scalar $info->locations,  [ '/var/run' ], 'default location');
 is($info->info_level, 0, 'default info level');
 is_deeply(scalar $info->pidfiles, [], 'no automatic scan');
 
 $info = new_ok("Proc::PidFile::Info", [locations => ['t/run', 't/service.pid'], info_level => 1 ]);
-is_deeply(scalar $info->location, ['t/run', 't/service.pid'], 'custom location');
+is_deeply(scalar $info->locations, ['t/run', 't/service.pid'], 'custom location');
 is($info->info_level, 1, 'custom info level');
 
 check_pids( $info->pidfiles() );
