@@ -103,6 +103,8 @@ sub _collect_info
             close $fh;
 
             chomp($pid);
+            $pid =~ s/^\s+//;
+            $pid =~ s/\s+$//;
             $info->{pid} = $pid;
         }
         else {
