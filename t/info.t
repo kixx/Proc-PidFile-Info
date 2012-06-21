@@ -8,6 +8,7 @@ my %service_info = (
     service => 123,
     bar => 456,
     foo => 789,
+    whitespace => 144,
 );
 
 $info = new_ok("Proc::PidFile::Info", [ autoscan => 0 ]);
